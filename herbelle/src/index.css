@@ -1,46 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
-:root {
-  /* Primary Colors */
-  --color-primary: #6A2C91;
-  --color-primary-light: #A78BFA;
+@theme {
+  /* Surfaces */
+  --color-background: #F6F3EA;
+  /* page background (warm cream) */
+  --color-surface: #FFFFFF;
+  /* cards, search input */
+  --color-border: #DAD5C4;
+  /* card outlines, dividers */
 
-  /* Secondary Colors */
-  --color-secondary: #4B7F52;
-  --color-secondary-light: #C8E6C9;
+  /* Text */
+  --color-ink: #1F2A22;
+  /* body text, headings */
+  --color-ink-muted: #5B665E;
+  /* subtitles, measurements */
 
-  /* Accent Colors */
-  --color-accent: #8B5E3C;
-  --color-accent-light: #D7C9B4;
+  /* Brand */
+  --color-primary: #2F5D3A;
+  /* logo, active mode button, hearts, links */
+  --color-primary-soft: #E3ECDD;
+  /* hover and focus fills */
 
-  /* Neutral Colors */
-  --color-text-primary: #374151;
-  --color-text-secondary: #6B7280;
-  --color-border: #E5E7EB;
-  --color-background: #F8FAFC;
+  /* Feedback */
+  --color-error: #B3402A;
+  /* failed requests */
 
-  /* Semantic Colors */
-  --color-success: #2E7D32;
-  --color-favorite: #D6336C;
-  --color-highlight: #FCE7F3;
+  /* Recipe photo placeholders */
+  --color-photo-1: #C9D8B6;
+  --color-photo-2: #E8D9B5;
+  --color-photo-3: #D6C3A5;
+  --color-photo-4: #BFD3C1;
+  --color-photo-5: #EAC9B0;
+  --color-photo-6: #CFE0D0;
+
+  /* Fonts */
+  --font-heading: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
-@theme {
-  --color-primary: #6A2C91;
-  --color-primary-light: #A78BFA;
+@layer base {
+  body {
+    @apply bg-background text-ink font-body;
+  }
 
-  --color-secondary: #4B7F52;
-  --color-secondary-light: #C8E6C9;
-
-  --color-accent: #8B5E3C;
-  --color-accent-light: #D7C9B4;
-
-  --color-text-primary: #374151;
-  --color-text-secondary: #6B7280;
-  --color-border: #E5E7EB;
-  --color-background: #F8FAFC;
-
-  --color-success: #2E7D32;
-  --color-favorite: #D6336C;
-  --color-highlight: #FCE7F3;
+  h1, h2, h3 {
+    @apply font-heading;
+  }
 }
