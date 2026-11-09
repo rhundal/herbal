@@ -18,34 +18,6 @@
 
 The application focuses exclusively on plant-based and vegetarian recipes, providing a curated discovery experience without exposing users to meat or seafood recipes.
 
-## ✨ Key Features
-
-- **Vegan Kitchen:** Discover recipes that exclude meat, seafood, dairy, eggs, and other animal-derived ingredients.
-- **Vegetarian Kitchen:** Explore recipes that exclude meat and seafood while allowing ingredients such as dairy and eggs.
-- **Curated Recipe Discovery:** Search and browse an approved collection of vegan and vegetarian recipes.
-- **Recipe Details:** View ingredients, measurements, cooking instructions, and recipe images.
-- **Dietary Filtering:** Switch between Vegan Kitchen and Vegetarian Kitchen to explore recipes according to dietary preferences.
-
-## 🔍 How I Implemented Dietary Restrictions
-
-One of the design challenges was that **TheMealDB API does not provide a dedicated vegan or vegetarian filter**.
-
-Rather than allowing users to search the entire API database and attempting to remove non-vegetarian results afterward, I implemented an application-level dietary restriction using a curated recipe allowlist.
-
-### Curated Recipe Allowlist
-
-Instead of relying entirely on API search results, Herbelle maintains an approved collection of recipe IDs retrieved from TheMealDB.
-
-The application follows this approach:
-
-1. **Fetch Recipe Data:** Retrieve recipe information from TheMealDB API.
-2. **Maintain an Allowlist:** Store approved recipe IDs that have been reviewed and classified as vegan or vegetarian.
-3. **Apply Dietary Classification:** Assign each approved recipe to its corresponding dietary category.
-4. **Restrict Search Results:** Only allow searches against the curated recipe collection.
-5. **Filter Dynamically:** Display recipes according to the user's selected dietary mode.
-
-This ensures that users cannot discover non-approved recipes through the application's search functionality.
-
 ### 🌱 Two Dietary Modes
 
 Herbelle provides two distinct recipe discovery experiences:
@@ -59,59 +31,107 @@ Herbelle provides two distinct recipe discovery experiences:
 
 The two classifications are maintained separately because a vegetarian recipe is not necessarily vegan.
 
-## 💡 Why Use an Allowlist Approach?
+## ✨ Key Features
+
+- **Vegan Kitchen:** Discover recipes from TheMealDB's dedicated Vegan category.
+- **Vegetarian Kitchen:** Explore recipes from TheMealDB's dedicated Vegetarian category.
+- **Dietary Category Selection:** Switch between Vegan Kitchen and Vegetarian Kitchen to explore recipes based on dietary preferences.
+- **Recipe Search:** Search for meals within the currently selected dietary category.
+- **Recipe Details:** View ingredients, measurements, cooking instructions, and recipe images.
+- **Favorites:** Save favorite recipes for easy access.
+
+## 🔍 How I Implemented Dietary Categories
+
+One of the architectural considerations was how to restrict recipe discovery to vegan and vegetarian meals.
+
+TheMealDB provides dedicated **Vegan** and **Vegetarian** categories, allowing Herbelle to retrieve recipes directly from the relevant category instead of searching the entire database and manually filtering individual recipes.
+
+Rather than maintaining a separate recipe catalogue or manually curated allowlists as originally planned, Herbelle uses TheMealDB's category-based filtering endpoints.
+
+### Category-Based Recipe Discovery
+
+The application follows this approach:
+
+1. **Select Dietary Category:** The user chooses either Vegan Kitchen or Vegetarian Kitchen.
+2. **Fetch Category Recipes:** Herbelle requests recipes from the corresponding TheMealDB category endpoint.
+3. **Display Matching Recipes:** The application displays recipes returned for the selected category.
+4. **Search Within Category:** Users can search for recipes within their currently selected dietary category.
+5. **Retrieve Recipe Details:** When a user selects a recipe, Herbelle retrieves its full details using the recipe ID.
+
+This approach keeps recipe discovery focused on the selected dietary preference while allowing the application to use the recipes available through TheMealDB.
+
+### TheMealDB API Endpoints
+
+**Vegan category:**
+`filter.php?c=Vegan`
+
+**Vegetarian category:**
+`filter.php?c=Vegetarian`
+
+The category endpoints return recipe summaries, including meal IDs, names, and thumbnail images. Herbelle uses the recipe ID to retrieve complete recipe information through TheMealDB's lookup endpoint.
+
+## 💡 Why Use a Category-Based Approach?
 
 This implementation offers several advantages:
 
-- **Greater Control:** The application controls which recipes users can access rather than depending on API search behavior.
-- **Consistent User Experience:** Users only encounter recipes that align with the application's dietary focus.
-- **More Reliable Filtering:** Separate vegan and vegetarian classifications prevent the two dietary categories from being treated as interchangeable.
-- **Scalability:** New recipes can be reviewed, classified, and added to the collection without changing the overall filtering architecture.
-- **Reduced Unwanted Results:** Non-approved recipes are excluded before they reach the application's search results.
-- **Separation of Concerns:** The API handles recipe data retrieval, while the application manages dietary rules and discovery logic.
+- **Simpler Architecture:** No need to maintain separate recipe allowlists or manually manage approved recipe IDs.
+- **Broader Recipe Discovery:** Access recipes available through TheMealDB's dedicated dietary categories.
+- **Consistent User Experience:** Users browse recipes based on their selected dietary category.
+- **Dynamic Category Switching:** Changing dietary preferences triggers a request for the corresponding category.
+- **Separation of Concerns:** TheMealDB handles recipe categorization and data retrieval, while Herbelle manages the user interface, application state, search, and recipe presentation.
+- **Maintainability:** New recipes added to TheMealDB's categories can become available without manually updating a local recipe catalogue.
+
+**Dietary classification note:** Herbelle relies on TheMealDB's Vegan and Vegetarian category assignments. It does not independently verify every recipe's ingredients, so the accuracy of dietary classification depends on the API's categorization.
 
 ## 🛠️ Technical Concepts Demonstrated
 
 - Third-party REST API integration (TheMealDB)
 - Asynchronous data fetching
-- Curated data management and allowlisting
+- API endpoint selection based on user input
+- Category-based data retrieval
 - Search and filtering logic
-- Conditional rendering in React
-- State management
+- React state management
+- Conditional rendering
 - Component-based architecture
+- Dynamic data rendering
 - Separation of application logic and API responsibilities
+- Loading and error state handling
 
 ## 🍃 Project Goal
 
-Herbelle is designed to make recipe discovery simpler for people following vegan and vegetarian diets.
+Herbelle is designed to make recipe discovery simpler for people exploring vegan and vegetarian meals.
 
-By combining an external recipe API with application-level dietary controls, the project demonstrates how an application can extend an API's capabilities to deliver a more focused and intentional user experience. The application enforces its own business rules rather than assuming the external API supports every requirement.
+By using TheMealDB's dedicated dietary categories, the project demonstrates how a React application can use an external API's filtering capabilities to create a focused recipe discovery experience.
 
-Note: Since my application utilizes a client-side allowlist, it controls what users can discover through my app's UI, not what someone could request directly from TheMealDB.
+The application manages its own user interactions, category selection, search functionality, and recipe presentation while relying on the API for recipe data and dietary categorization.
+
+**Note:** Herbelle controls recipe discovery through its own user interface. It does not restrict direct access to TheMealDB's API or independently enforce dietary restrictions on the external service.
+
+---
 
 #### Implementation Order for Herbelle
 
-1. Create approved recipe catalogue
-2. Review and classify 10–15 recipes
-3. Separate vegan and vegetarian collections
-4. Implement dietary mode selection
-5. Restrict API search results using approved IDs
-6. Implement recipe search within each collection
-7. Test that non-approved recipes never appear
+1. Set up TheMealDB API integration.
+2. Implement Vegan and Vegetarian category endpoints.
+3. Implement dietary mode selection.
+4. Fetch recipes dynamically based on the selected category.
+5. Display recipes returned by the selected category.
+6. Implement recipe search within the selected category.
+7. Implement recipe detail retrieval using recipe IDs.
+8. Implement favorites functionality.
+9. Test category switching, search behavior, API responses, and error handling.
 
-#### Data structure
+#### Data Structure and State Management
 
-1. A separate allowlist for each vegetarianAllowlist and veganAllowlist
-2. `Set` - stores unique values
-   1. Each set would contain approved recipe IDs
-3. Why use a Set?
-   1. Unique values: Prevents accidentally adding the same recipe ID multiple times.
-   2. Fast lookup: You can check whether a recipe ID is approved using has().
-   3. Easy maintenance: Add and remove approved recipe IDs using built-in Set methods.
+1. **Selected Dietary Mode:** Store the currently selected category (Vegan or Vegetarian) in React state.
+2. **Recipe Collection:** Store the recipes returned by the selected category endpoint in React state.
+3. **Search Term:** Track the user's search input in React state.
+4. **Favorites:** Maintain saved recipe IDs separately from the currently selected dietary category.
 
 #### Role of React
 
-1. Sets: Maintain approved recipe IDs.
-2. React state: Track the user's selected dietary mode and current search results.
-3. Filtering function: Apply the selected allowlist to the API response.
-4. Components: Display the approved recipes.
+1. **React State:** Tracks the selected dietary mode, fetched recipes, search term, loading status, errors, and favorites.
+2. **API Integration:** Fetches recipes from the appropriate TheMealDB category endpoint.
+3. **Search Logic:** Filters the currently retrieved category's recipes based on the user's search.
+4. **Conditional Rendering:** Displays the appropriate recipes and UI based on the selected category and application state.
+5. **Components:** Organize the application into reusable components for category selection, recipe cards, recipe details, search, and favorites.

@@ -5,15 +5,7 @@
 3. How search works
    1. Imagine a user selects Vegan Kitchen. The application should:
       1. Identify the selected dietary mode.
-      2. Retrieve the approved vegan recipe IDs.
-      3. Match those IDs against the recipes returned by your API.
-      4. Display only matching recipes.
-      5. Apply the user's search term to that restricted collection.
-      6. The same process applies to Vegetarian Kitchen, except it uses the vegetarian collection.
-      7. Allowlist becomes your source of truth.
-      8. For every new recipe:
-         1. Retrieve it from TheMealDB.
-         2. Review its ingredients.
-         3. Assign its dietary classification.
-         4. Add its ID to the appropriate collection.
-         5. Make it searchable. This prevents newly discovered API recipes from automatically becoming available to users.
+      2. Search the fetched results (stateVariable) for that dietary mode.
+      3. Apply the user's search term to that fetched result.
+      4. The same process applies to Vegetarian Kitchen, except it uses the vegetarian collection.
+      5. Allowlist becomes your source of truth. (optional can maintain to gain more control over the results - for future maybe)
