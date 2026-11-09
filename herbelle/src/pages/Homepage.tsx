@@ -1,3 +1,6 @@
+// Links to respective category page
+// navigate to category page
+
 export default function Homepage() {
   return (
     <div className="bg-background flex flex-col m-15">
