@@ -88,3 +88,30 @@ Herbelle is designed to make recipe discovery simpler for people following vegan
 By combining an external recipe API with application-level dietary controls, the project demonstrates how an application can extend an API's capabilities to deliver a more focused and intentional user experience. The application enforces its own business rules rather than assuming the external API supports every requirement.
 
 Note: Since my application utilizes a client-side allowlist, it controls what users can discover through my app's UI, not what someone could request directly from TheMealDB.
+
+#### Implementation Order for Herbelle
+
+1. Create approved recipe catalogue
+2. Review and classify 10–15 recipes
+3. Separate vegan and vegetarian collections
+4. Implement dietary mode selection
+5. Restrict API search results using approved IDs
+6. Implement recipe search within each collection
+7. Test that non-approved recipes never appear
+
+#### Data structure
+
+1. A separate allowlist for each vegetarianAllowlist and veganAllowlist
+2. `Set` - stores unique values
+   1. Each set would contain approved recipe IDs
+3. Why use a Set?
+   1. Unique values: Prevents accidentally adding the same recipe ID multiple times.
+   2. Fast lookup: You can check whether a recipe ID is approved using has().
+   3. Easy maintenance: Add and remove approved recipe IDs using built-in Set methods.
+
+#### Role of React
+
+1. Sets: Maintain approved recipe IDs.
+2. React state: Track the user's selected dietary mode and current search results.
+3. Filtering function: Apply the selected allowlist to the API response.
+4. Components: Display the approved recipes.
