@@ -1,22 +1,12 @@
 // Links to respective category page
 // navigate to category page
 
+import CommonNavBar from "../components/CommonNavBar";
+
 export default function Homepage() {
   return (
     <div className="bg-background flex flex-col m-15">
-      <header className="flex flex-col md:flex-row justify-between items-center">
-        <div className="flex justify-start mb-5 md:mb-0">
-          <h1 className="text-3xl font-heading text-primary font-bold">
-            Herbelle
-          </h1>
-        </div>
-        <div className="flex justify-end text-md text-primary">
-          <div className="flex flex-row gap-10 font-bold">
-            <div>Browse</div>
-            <div>Favorites(3)</div>
-          </div>
-        </div>
-      </header>
+      <CommonNavBar />
       <hr className="mt-10 border-2 border-border" />
       <main>
         <div className="flex flex-col gap-3 text-center mt-5">
