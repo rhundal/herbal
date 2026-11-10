@@ -1,9 +1,20 @@
 // Links to respective category page
 // navigate to category page
 
+import { useState } from "react";
 import CommonNavBar from "../components/CommonNavBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Homepage() {
+  const [selectedCategory, setSelectedCategory] = useState<string>("vegan");
+
+  const navigate = useNavigate();
+
+  function selectCategoryVegan() {
+    setSelectedCategory("vegan");
+    navigate("/category/Vegan");
+  }
+
   return (
     <div className="bg-background flex flex-col m-15">
       <CommonNavBar />
@@ -36,7 +47,10 @@ export default function Homepage() {
                 <div className="ml-5">No honey</div>
               </div>
               <div className="m-5">
-                <button className="px-5 py-2 bg-primary text-surface rounded-lg">
+                <button
+                  onClick={selectCategoryVegan}
+                  className="px-5 py-2 bg-primary text-surface rounded-lg"
+                >
                   Explore Vegan Kitchen
                 </button>
               </div>
