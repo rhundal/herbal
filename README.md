@@ -12,15 +12,15 @@
 5. Components & UI management
 </details>
 
-# 🌿 Herbelle – Vegan & Vegetarian Recipe Discovery
+# 🌿 Herbal – Vegan & Vegetarian Recipe Discovery
 
-**Herbelle** is a vegan and vegetarian recipe discovery application that allows users to explore meals, discover new ingredients, and find cooking inspiration using [TheMealDB API](https://www.themealdb.com/api.php).
+**Herbal** is a vegan and vegetarian recipe discovery application that allows users to explore meals, discover new ingredients, and find cooking inspiration using [TheMealDB API](https://www.themealdb.com/api.php).
 
 The application focuses exclusively on plant-based and vegetarian recipes, providing a curated discovery experience without exposing users to meat or seafood recipes.
 
 ### 🌱 Two Dietary Modes
 
-Herbelle provides two distinct recipe discovery experiences:
+Herbal provides two distinct recipe discovery experiences:
 
 | Vegan Kitchen      | Vegetarian Kitchen |
 | ------------------ | ------------------ |
@@ -58,17 +58,6 @@ One of the architectural considerations was how to restrict recipe discovery to 
 
 This approach keeps recipe discovery focused on the selected dietary preference while allowing the application to use the recipes available through TheMealDB.
 
-### 🌱 Two Dietary Modes
-
-Herbelle provides two distinct recipe discovery experiences:
-
-| Vegan Kitchen      | Vegetarian Kitchen |
-| ------------------ | ------------------ |
-| No meat or seafood | No meat or seafood |
-| No dairy           | Dairy permitted    |
-| No eggs            | Eggs permitted     |
-| No honey           | Honey permitted    |
-
 ## 💡 Why Use an API-Derived Allowlist?
 
 - **Dietary Control Without Manual Upkeep:** The app still restricts users to an approved set of recipes, but the set comes from the API's categories instead of a list I maintain by hand.
@@ -96,15 +85,15 @@ Herbelle provides two distinct recipe discovery experiences:
 
 ## 🍃 Project Goal
 
-Herbelle is designed to make recipe discovery simpler for people following vegan and vegetarian diets.
+Herbal is designed to make recipe discovery simpler for people following vegan and vegetarian diets.
 
 By combining an external recipe API with application-level dietary controls, the project demonstrates how an application can extend an API's capabilities to deliver a more focused and intentional user experience.
 
-**Note:** Herbelle controls recipe discovery through its own user interface. It does not restrict direct access to TheMealDB's API or independently enforce dietary restrictions on the external service.
+**Note:** Herbal controls recipe discovery through its own user interface. It does not restrict direct access to TheMealDB's API or independently enforce dietary restrictions on the external service.
 
 ---
 
-#### Implementation Order for Herbelle
+#### Implementation Order for Herbal
 
 1. Set up TheMealDB API integration.
 2. Implement Vegan and Vegetarian category endpoints.
