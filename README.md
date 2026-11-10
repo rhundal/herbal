@@ -42,68 +42,63 @@ The two classifications are maintained separately because a vegetarian recipe is
 
 ## 🔍 How I Implemented Dietary Categories
 
-One of the architectural considerations was how to restrict recipe discovery to vegan and vegetarian meals.
+One of the architectural considerations was how to restrict recipe discovery to vegan and vegetarian meals. A design challenge is that TheMealDB's search endpoint has no dietary filter. search.php?s= searches the entire database, so a search for a "dish" can return meat dishes.TheMealDB does offer filter.php?c=Vegan and filter.php?c=Vegetarian, which return every recipe in those categories. However, no available free-tier endpoint combines a category filter with a search term.
 
-TheMealDB provides dedicated **Vegan** and **Vegetarian** categories, allowing Herbelle to retrieve recipes directly from the relevant category instead of searching the entire database and manually filtering individual recipes.
+### Evolution of the Approach
 
-Rather than maintaining a separate recipe catalogue or manually curated allowlists as originally planned, Herbelle uses TheMealDB's category-based filtering endpoints.
+**Original plan: a hand-picked allowlist.** I planned to maintain a list of recipe IDs that I had personally reviewed and classified as vegan or vegetarian, and restrict all searches to that list. Too much work.
 
-### Category-Based Recipe Discovery
+**Revised plan: an API-derived allowlist.** After discovering TheMealDB's category filter, I dropped the hand-picked list. The category endpoints now help create the allowlist at runtime, so the API's own category assignment defines which recipes the app can show. Search is done client-side against that list instead of calling the API's search endpoint.
 
-The application follows this approach:
+#### How It Works
 
-1. **Select Dietary Category:** The user chooses either Vegan Kitchen or Vegetarian Kitchen.
-2. **Fetch Category Recipes:** Herbelle requests recipes from the corresponding TheMealDB category endpoint.
-3. **Display Matching Recipes:** The application displays recipes returned for the selected category.
-4. **Search Within Category:** Users can search for recipes within their currently selected dietary category.
-5. **Retrieve Recipe Details:** When a user selects a recipe, Herbelle retrieves its full details using the recipe ID.
+1. **Fetch the Category List:** On load (or when the user switches kitchens), fetch `filter.php?c=Vegan` or `filter.php?c=Vegetarian` and store the result in state as an array. This is the application's allowlist.
+2. **Search Client-Side:** Filter that array by recipe name (`strMeal`) against the user's search term. The app never calls `search.php?s=`, so non-approved recipes can never appear in results.
+3. **Fetch Details on Demand:** The category endpoints return only a lightweight record (`idMeal`, `strMeal`, `strMealThumb`). Full details (ingredients, measurements, instructions) are fetched with `lookup.php?i={id}` only when the user opens a recipe.
 
 This approach keeps recipe discovery focused on the selected dietary preference while allowing the application to use the recipes available through TheMealDB.
 
-### TheMealDB API Endpoints
+### 🌱 Two Dietary Modes
 
-**Vegan category:**
-`filter.php?c=Vegan`
+Herbelle provides two distinct recipe discovery experiences:
 
-**Vegetarian category:**
-`filter.php?c=Vegetarian`
+| Vegan Kitchen      | Vegetarian Kitchen |
+| ------------------ | ------------------ |
+| No meat or seafood | No meat or seafood |
+| No dairy           | Dairy permitted    |
+| No eggs            | Eggs permitted     |
+| No honey           | Honey permitted    |
 
-The category endpoints return recipe summaries, including meal IDs, names, and thumbnail images. Herbelle uses the recipe ID to retrieve complete recipe information through TheMealDB's lookup endpoint.
+## 💡 Why Use an API-Derived Allowlist?
 
-## 💡 Why Use a Category-Based Approach?
+- **Dietary Control Without Manual Upkeep:** The app still restricts users to an approved set of recipes, but the set comes from the API's categories instead of a list I maintain by hand.
+- **Reliable Filtering:** Results are limited to the selected category before search is applied, so unwanted recipes are excluded up front instead of being stripped out afterward.
+- **Fast Search:** The category lists are small, so searching in memory is instant and requires no extra network requests.
+- **Efficient Data Fetching:** Full recipe details are requested only when a user opens a recipe.
+- **Separation of Concerns:** The API handles recipe data and category membership, while the application manages search and discovery logic.
 
-This implementation offers several advantages:
+## ⚠️ Trade-offs and Limitations
 
-- **Simpler Architecture:** No need to maintain separate recipe allowlists or manually manage approved recipe IDs.
-- **Broader Recipe Discovery:** Access recipes available through TheMealDB's dedicated dietary categories.
-- **Consistent User Experience:** Users browse recipes based on their selected dietary category.
-- **Dynamic Category Switching:** Changing dietary preferences triggers a request for the corresponding category.
-- **Separation of Concerns:** TheMealDB handles recipe categorization and data retrieval, while Herbelle manages the user interface, application state, search, and recipe presentation.
-- **Maintainability:** New recipes added to TheMealDB's categories can become available without manually updating a local recipe catalogue.
-
-**Dietary classification note:** Herbelle relies on TheMealDB's Vegan and Vegetarian category assignments. It does not independently verify every recipe's ingredients, so the accuracy of dietary classification depends on the API's categorization.
+- **Name-only search:** Because search runs on the lightweight category records, it matches recipe names only. Searching by ingredient or instructions would require a detail lookup for every recipe.
+- **Reliance on TheMealDB's classification:** The app trusts the API's Vegan and Vegetarian categories rather than my own review, so recipes are only as accurately classified as the API data.
+-
 
 ## 🛠️ Technical Concepts Demonstrated
 
 - Third-party REST API integration (TheMealDB)
 - Asynchronous data fetching
-- API endpoint selection based on user input
-- Category-based data retrieval
-- Search and filtering logic
-- React state management
-- Conditional rendering
+- Client-side search and filtering
+- Derived state vs. stored state
+- Conditional rendering in React
+- State management
 - Component-based architecture
-- Dynamic data rendering
 - Separation of application logic and API responsibilities
-- Loading and error state handling
 
 ## 🍃 Project Goal
 
-Herbelle is designed to make recipe discovery simpler for people exploring vegan and vegetarian meals.
+Herbelle is designed to make recipe discovery simpler for people following vegan and vegetarian diets.
 
-By using TheMealDB's dedicated dietary categories, the project demonstrates how a React application can use an external API's filtering capabilities to create a focused recipe discovery experience.
-
-The application manages its own user interactions, category selection, search functionality, and recipe presentation while relying on the API for recipe data and dietary categorization.
+By combining an external recipe API with application-level dietary controls, the project demonstrates how an application can extend an API's capabilities to deliver a more focused and intentional user experience.
 
 **Note:** Herbelle controls recipe discovery through its own user interface. It does not restrict direct access to TheMealDB's API or independently enforce dietary restrictions on the external service.
 
@@ -121,17 +116,22 @@ The application manages its own user interactions, category selection, search fu
 8. Implement favorites functionality.
 9. Test category switching, search behavior, API responses, and error handling.
 
-#### Data Structure and State Management
+### ⚛️ Role of React and Application Flow
 
-1. **Selected Dietary Mode:** Store the currently selected category (Vegan or Vegetarian) in React state.
-2. **Recipe Collection:** Store the recipes returned by the selected category endpoint in React state.
-3. **Search Term:** Track the user's search input in React state.
-4. **Favorites:** Maintain saved recipe IDs separately from the currently selected dietary category.
+#### My approach to how to fetch data from the api
 
-#### Role of React
+1. apiService.ts - defines how to fetch the data (takes in 2 parameters - searchTerm and selectedCategory)
+2. contextAPI - I am introducing a contextapi to track selectCategory and searchTerm across my components.
+3. custom hook with useEffect - controls when that fetch runs in my components. custom hook reads the values from
+   Context and then passes them down as arguments when calling apiService.ts functions.
 
-1. **React State:** Tracks the selected dietary mode, fetched recipes, search term, loading status, errors, and favorites.
-2. **API Integration:** Fetches recipes from the appropriate TheMealDB category endpoint.
-3. **Search Logic:** Filters the currently retrieved category's recipes based on the user's search.
-4. **Conditional Rendering:** Displays the appropriate recipes and UI based on the selected category and application state.
-5. **Components:** Organize the application into reusable components for category selection, recipe cards, recipe details, search, and favorites.
+#### Possible issues
+
+• Search input frequency. Since searchTerm lives in Context and triggers a fetch inside useEffect, typing every single letter in a search bar could fire an API call on every keystroke. Consider debouncing the search term (waiting a brief pause after typing stops) before updating Context or running the fetch.
+• Stale requests (Race conditions). If a user switches categories or types quickly, a slower previous request might resolve after a newer one. Using an AbortController cleanup function inside your useEffect will prevent old results from overwriting new ones.
+• URL state vs. Context. Tracking selectedCategory and searchTerm in Context works great for component sharing. Just keep in mind that if a user refreshes the browser or shares a link to a category or search page, Context resets unless you also sync those values with URL parameters later.
+
+#### I plan on exporting 2 functions from file apiService.ts
+
+1. one for fetching recipes based on selected category
+2. another for fetching results for recipes based on search query within that category
