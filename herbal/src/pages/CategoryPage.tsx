@@ -67,7 +67,7 @@ export default function CategoryPage() {
         </div>
       </div>
       <div>
-        <div className="bg-surface rounded-xl border-1 border-border w-full p-5 flex flex-row justify-between items-center">
+        <div className="bg-surface rounded-xl border-1 border-border w-full p-5 flex flex-row justify-between items-center mb-10">
           <div className="flex flex-row gap-5 justify-start items-center">
             <div className="w-20 h-20 border-1 border-border rounded-xl bg-photo-1 place-items-center">
               <img
