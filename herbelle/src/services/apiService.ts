@@ -8,8 +8,12 @@ My approach to how to fetch data from the api
 
 1. apiService.ts - defines how to fetch the data (takes in 2 parameters - searchTerm and selectedCategory)
 2. contextAPI - I am introducing a contextapi to track selectCategory and searchTerm across my components. 
-3. custom hook with useEffect - controls when that fetch runs in my components. custom hook reads the values from 
-Context and then passes them down as arguments when calling apiService.ts functions.
+3. Keep useFetch generic
+Because the project requires a generic useFetch hook used throughout the application, useFetch should not know anything about selectedCategory or Context.
+Instead, page component reads selectedCategory from Context and passes () => fetchMealsByCategory(selectedCategory) into useFetch. 
+That way, I can reuse the exact same useFetch hook on recipe detail page for fetchRecipeById(idMeal)—which doesn't use Context at all.
+4. custom hook with useEffect - controls when that fetch runs in my components. custom hook reads the values from 
+component and then passes them down as arguments when calling apiService.ts functions.
 
 
 Possible issues
@@ -56,7 +60,7 @@ const fetchMealsByCategory = async (
 };
 
 // filterMealsByTerm(searchTerm: string, allowList: Meal[]): Meal[] filters that Meal[] allowlist synchronously as the user types.
-
+// called on category page
 function filterMealsBySearchTerm(
   searchTerm: string,
   allowList: Meal[],
@@ -78,7 +82,7 @@ function filterMealsBySearchTerm(
 }
 
 // fetchRecipeById(idMeal: string): Promise<Recipe | null> fetches full Recipe details via api... when a user clicks a Meal card.
-
+// called on recipe details page
 const fetchRecipeById = async (idMeal: string): Promise<Recipe | null> => {
   try {
     if (!idMeal.trim()) {
@@ -126,3 +130,5 @@ const fetchRecipeById = async (idMeal: string): Promise<Recipe | null> => {
     throw error;
   }
 };
+
+export { fetchMealsByCategory, filterMealsBySearchTerm, fetchRecipeById };

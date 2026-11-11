@@ -43,3 +43,9 @@ export interface Recipe {
   strYoutube: string | null;
   ingredients: string[];
 }
+
+export interface UseFetchResult<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+}
