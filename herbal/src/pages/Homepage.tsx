@@ -1,7 +1,7 @@
 // Links to respective category page
 // navigate to category page
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import CommonNavBar from "../components/CommonNavBar";
 import { useNavigate } from "react-router-dom";
 import UserInputContext from "../context/UserInputContext";

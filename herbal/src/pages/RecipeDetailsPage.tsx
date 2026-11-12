@@ -1,16 +1,12 @@
 // displays full details for a single recipe
 // includes button for Add To Favorites or Remove from Favorites
 // favorite button handled by FavoritesContext
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import CommonNavBar from "../components/CommonNavBar";
 import { useNavigate, useParams } from "react-router-dom";
 import UserInputContext from "../context/UserInputContext";
 import useFetch from "../hooks/useFetch";
-import {
-  fetchMealsByCategory,
-  filterMealsBySearchTerm,
-  fetchRecipeById,
-} from "../services/apiService";
+import { fetchRecipeById } from "../services/apiService";
 export default function RecipeDetailsPage() {
   const userContext = useContext(UserInputContext);
 

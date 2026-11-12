@@ -4,11 +4,7 @@
 
 import { useContext } from "react";
 import CommonNavBar from "../components/CommonNavBar";
-import {
-  fetchMealsByCategory,
-  filterMealsBySearchTerm,
-  fetchRecipeById,
-} from "../services/apiService";
+import { fetchMealsByCategory } from "../services/apiService";
 
 import UserInputContext from "../context/UserInputContext";
 import useFetch from "../hooks/useFetch";

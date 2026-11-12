@@ -1,5 +1,4 @@
 // to be imported in navbar
-import { useState } from "react";
 import { useContext } from "react";
 import UserInputContext from "../context/UserInputContext";
 export default function SearchBar({ setUserSearchTerm }: any) {

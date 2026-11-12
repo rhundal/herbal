@@ -5,7 +5,6 @@
 import {
   fetchMealsByCategory,
   filterMealsBySearchTerm,
-  fetchRecipeById,
 } from "../services/apiService";
 import useFetch from "../hooks/useFetch";
 import UserInputContext from "../context/UserInputContext";
@@ -35,6 +34,9 @@ export default function SearchResultsPage() {
     () => fetchMealsByCategory(selectedCategoryByUser),
     [selectedCategoryByUser],
   );
+
+  console.log(loading);
+  console.log(error);
 
   const filteredMeals = categoryMeals
     ? filterMealsBySearchTerm(userSearchTerm, categoryMeals)

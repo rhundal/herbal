@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import SearchBar from "./SearchBar";
 import UserInputContext from "../context/UserInputContext";
 // import { useNavigate } from "react-router-dom";
