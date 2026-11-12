@@ -36,13 +36,13 @@ export default function RecipeDetailsPage() {
     <div className="bg-background flex flex-col m-15">
       <CommonNavBar />
       <hr className="mt-10 border-2 border-border" />
-      <div className="flex flex-row justify-start m-5">
+      <div className="flex flex-col md:flex-row justify-start m-5">
         <div className="text-primary text-center justify-end">
           <button onClick={handleOpenMenu}> Back to recipes (menu) </button>
         </div>
       </div>
       <div className="flex flex-col w-full">
-        <div className="flex flex-row gap-10">
+        <div className="flex flex-col md:flex-row gap-10">
           <div className="flex justify-start shrink-0">
             <img
               src={recipe?.strMealThumb}
@@ -65,7 +65,7 @@ export default function RecipeDetailsPage() {
               {recipe?.ingredients.map((ingredient, index) => (
                 <li key={`${ingredient}-${index}`} className="">
                   <div className="flex flex-col">
-                    <div className="flex flex-row mb-3 justify-between">
+                    <div className="flex flex-col md:flex-row mb-3 justify-between">
                       <div className="flex justify-start">{ingredient}</div>
                       <div className="flex justify-end">
                         {" "}
