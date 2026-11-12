@@ -111,7 +111,9 @@ By combining an external recipe API with application-level dietary controls, the
 
 1. apiService.ts - defines how to fetch the data (takes in 2 parameters - searchTerm and selectedCategory)
 2. contextAPI - I am introducing a contextapi to track selectCategory and searchTerm across my components.
-3. custom hook with useEffect - controls when that fetch runs in my components. custom hook reads the values from
+3. I also have FavoritesContext for tracking favorites across all the components
+4. I also have useLocalStorage hook for support of localstorage saving of user preferences across the applicaiton.
+5. custom hook with useEffect - controls when that fetch runs in my components. custom hook reads the values from
    Context and then passes them down as arguments when calling apiService.ts functions.
 
 #### Possible issues
