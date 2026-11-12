@@ -34,7 +34,7 @@ import type {
   Recipe,
   RawMealResponse,
 } from "../types/recipe";
-import { type Category } from "../types/recipe";
+// import { type Category } from "../types/recipe";
 
 // fetchMealsByCategory(selectedCategory: AllowedCategories): Promise<Meal[]> fetches runtime allowlist of Meal cards.
 

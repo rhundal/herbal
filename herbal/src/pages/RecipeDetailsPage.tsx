@@ -22,6 +22,9 @@ export default function RecipeDetailsPage() {
     error,
   } = useFetch(() => fetchRecipeById(recipeId ?? ""), [recipeId]);
 
+  console.log(loading);
+  console.log(error);
+
   const navigate = useNavigate();
 
   function handleOpenMenu() {
