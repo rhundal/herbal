@@ -116,10 +116,10 @@ By combining an external recipe API with application-level dietary controls, the
 
 #### Possible issues
 
-• Search input frequency. Since searchTerm lives in Context and triggers a fetch inside useEffect, typing every single letter in a search bar could fire an API call on every keystroke. I might consider debouncing the search term (waiting a brief pause after typing stops) before updating Context or running the fetch.
-• Stale requests (Race conditions). If a user switches categories or types quickly, a slower previous request might resolve after a newer one. Using an AbortController cleanup function inside your useEffect will prevent old results from overwriting new ones. - already fixed this
-• URL state vs. Context. Tracking selectedCategory and searchTerm in Context works great for component sharing. If a user refreshes the browser or shares a link to a category or search page, Context resets unless I also sync those values with URL parameters later.
-• I need to standardize or clean up the instructions for a recipe before rendering them because right now they are a mixture of different formats.
+1. Search input frequency. Since searchTerm lives in Context and triggers a fetch inside useEffect, typing every single letter in a search bar could fire an API call on every keystroke. I might consider debouncing the search term (waiting a brief pause after typing stops) before updating Context or running the fetch.
+2. Stale requests (Race conditions). If a user switches categories or types quickly, a slower previous request might resolve after a newer one. Using an AbortController cleanup function inside your useEffect will prevent old results from overwriting new ones. - already fixed this
+3. URL state vs. Context. Tracking selectedCategory and searchTerm in Context works great for component sharing. If a user refreshes the browser or shares a link to a category or search page, Context resets unless I also sync those values with URL parameters later.
+4. I need to standardize or clean up the instructions for a recipe before rendering them because right now they are a mixture of different formats.
 
 #### I am exporting 3 functions from file apiService.ts
 
