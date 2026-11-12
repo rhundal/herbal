@@ -41,15 +41,15 @@ export default function RecipeDetailsPage() {
           <button onClick={handleOpenMenu}> Back to recipes (menu) </button>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         <div className="flex flex-row gap-10">
-          <div className="flex justify-start">
+          <div className="flex justify-start shrink-0">
             <img
               src={recipe?.strMealThumb}
               className="w-130 h-90 rounded-xl mb-10"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col flex-1 min-w-0">
             <div className="mb-5">
               <button className="bg-transparent text-primary rounded-xl border-1 border-primary px-3 p-1">
                 {selectedCategoryByUser === "Vegan"
@@ -61,15 +61,18 @@ export default function RecipeDetailsPage() {
               <h1 className="text-primary text-3xl"> {recipe?.strMeal}</h1>
             </div>
             <div className="text-primary font-bold mb-2">Ingredients</div>
-            <ul>
+            <ul className="mt-3 w-full">
               {recipe?.ingredients.map((ingredient, index) => (
-                <li key={`${ingredient}-${index}`}>
+                <li key={`${ingredient}-${index}`} className="">
                   <div className="flex flex-col">
-                    <div className="flex flex-row mb-3">
-                      <div>{ingredient}</div>
-                      <div> {recipe.strMeasures[index]}</div>
+                    <div className="flex flex-row mb-3 justify-between">
+                      <div className="flex justify-start">{ingredient}</div>
+                      <div className="flex justify-end">
+                        {" "}
+                        {recipe.strMeasures[index]}
+                      </div>
                     </div>
-                    <hr />
+                    <hr className="mb-3 border-t border-border" />
                   </div>
                 </li>
               ))}
@@ -77,9 +80,9 @@ export default function RecipeDetailsPage() {
           </div>
         </div>
         <div className="text-primary font-bold">Instructions</div>
+
         <div className="flex flex-col text-primary">
-          <div>1. instruction 1</div>
-          <div>2. instruction 2</div>
+          <div> {recipe?.strInstructions}</div>
         </div>
       </div>
     </div>
