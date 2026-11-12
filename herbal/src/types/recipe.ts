@@ -32,6 +32,16 @@ export interface RawMealResponse {
   strIngredient8: string | null;
   strIngredient9: string | null;
   strIngredient10: string | null;
+  strMeasure1: string | null;
+  strMeasure2: string | null;
+  strMeasure3: string | null;
+  strMeasure4: string | null;
+  strMeasure5: string | null;
+  strMeasure6: string | null;
+  strMeasure7: string | null;
+  strMeasure8: string | null;
+  strMeasure9: string | null;
+  strMeasure10: string | null;
 }
 
 export interface Recipe {
@@ -42,6 +52,7 @@ export interface Recipe {
   strTags: string[];
   strYoutube: string | null;
   ingredients: string[];
+  strMeasures: string[];
 }
 
 export interface UseFetchResult<T> {
