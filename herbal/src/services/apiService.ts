@@ -121,9 +121,23 @@ const fetchRecipeById = async (idMeal: string): Promise<Recipe | null> => {
       recipeObject.strIngredient10,
     ].filter(Boolean);
 
+    const strMeasures = [
+      recipeObject.strMeasure1,
+      recipeObject.strMeasure2,
+      recipeObject.strMeasure3,
+      recipeObject.strMeasure4,
+      recipeObject.strMeasure5,
+      recipeObject.strMeasure6,
+      recipeObject.strMeasure7,
+      recipeObject.strMeasure8,
+      recipeObject.strMeasure9,
+      recipeObject.strMeasure10,
+    ].filter(Boolean);
+
     return {
       ...recipeObject,
       ingredients,
+      strMeasures,
     };
   } catch (error) {
     console.error("Error fetching recipe by category:", error);
