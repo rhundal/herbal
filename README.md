@@ -116,11 +116,13 @@ By combining an external recipe API with application-level dietary controls, the
 
 #### Possible issues
 
-• Search input frequency. Since searchTerm lives in Context and triggers a fetch inside useEffect, typing every single letter in a search bar could fire an API call on every keystroke. Consider debouncing the search term (waiting a brief pause after typing stops) before updating Context or running the fetch.
-• Stale requests (Race conditions). If a user switches categories or types quickly, a slower previous request might resolve after a newer one. Using an AbortController cleanup function inside your useEffect will prevent old results from overwriting new ones.
-• URL state vs. Context. Tracking selectedCategory and searchTerm in Context works great for component sharing. Just keep in mind that if a user refreshes the browser or shares a link to a category or search page, Context resets unless you also sync those values with URL parameters later.
+• Search input frequency. Since searchTerm lives in Context and triggers a fetch inside useEffect, typing every single letter in a search bar could fire an API call on every keystroke. I might consider debouncing the search term (waiting a brief pause after typing stops) before updating Context or running the fetch.
+• Stale requests (Race conditions). If a user switches categories or types quickly, a slower previous request might resolve after a newer one. Using an AbortController cleanup function inside your useEffect will prevent old results from overwriting new ones. - already fixed this
+• URL state vs. Context. Tracking selectedCategory and searchTerm in Context works great for component sharing. If a user refreshes the browser or shares a link to a category or search page, Context resets unless I also sync those values with URL parameters later.
+• I need to standardize or clean up the instructions for a recipe before rendering them because right now they are a mixture of different formats.
 
-#### I plan on exporting 2 functions from file apiService.ts
+#### I am exporting 3 functions from file apiService.ts
 
-1. one for fetching recipes based on selected category
-2. another for fetching results for recipes based on search query within that category
+1. one for fetching meals based on selected category
+2. second for fetching results for recipes based on search query within that category
+3. third for fetching recipe details for the selected meals
