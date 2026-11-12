@@ -1,18 +1,36 @@
 // Links to respective category page
 // navigate to category page
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CommonNavBar from "../components/CommonNavBar";
 import { useNavigate } from "react-router-dom";
+import UserInputContext from "../context/UserInputContext";
+/*
+Notes for myself - about how selectedCategory works
+
+1. In UserInputContext.tsx, seletedCategory state starts with a default value = "vegan"
+2. I need to update Context on homepage to change selectedCategory based on the kitchen button clicked
+3. Because CategoryPage is already watching [selectedCategory] insite its useFetch hook, updating Context on the homepage will cause automatic re-fetch based on the button clicked on homepage
+4. How I will update Context on homepage
+- pull setter from Context on Homepage - setSelectedCategory
+- update Context inside the button click handler for each category right before navigate
+*/
 
 export default function Homepage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("vegan");
+  const userInptContext = useContext(UserInputContext);
+
+  const setSelectedCategoryImported = userInptContext?.setSelectedCategory;
 
   const navigate = useNavigate();
 
   function selectCategoryVegan() {
-    setSelectedCategory("vegan");
+    setSelectedCategoryImported?.("Vegan");
     navigate("/category/Vegan");
+  }
+
+  function selectCategoryVegetarian() {
+    setSelectedCategoryImported?.("Vegetarian");
+    navigate("/category/Vegetarian");
   }
 
   return (
@@ -71,7 +89,10 @@ export default function Homepage() {
                 <div className="ml-5">Honey permitted</div>
               </div>
               <div className="m-5">
-                <button className="px-5 py-2 text-primary border-1 rounded-lg border-border">
+                <button
+                  onClick={selectCategoryVegetarian}
+                  className="px-5 py-2 text-primary border-1 rounded-lg border-border"
+                >
                   Explore Vegetarian Kitchen
                 </button>
               </div>

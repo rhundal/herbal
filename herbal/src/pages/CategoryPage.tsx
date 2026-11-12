@@ -20,6 +20,7 @@ export default function CategoryPage() {
   if (!userContext) return null;
 
   let selectedCategoryByUser = userContext.selectedCategory;
+  let setSelectedCategory = userContext.setSelectedCategory;
 
   // data returned from useFetch = Single source of truth. data returned from useFetch is meals state.
   // Whenever selectedCategory changes, useFetch automatically updates data and re-renders CategoryPage.
@@ -38,8 +39,16 @@ export default function CategoryPage() {
 
   const navigate = useNavigate();
 
-  function handleOpenRecipe() {
-    navigate(`/recipe/${data?.at(0)?.idMeal}`);
+  function handleOpenRecipe(id: string) {
+    navigate(`/recipe/${id}`);
+  }
+
+  function handleSwitchCategory() {
+    if (selectedCategoryByUser === "Vegan") {
+      setSelectedCategory("Vegetarian");
+    } else {
+      setSelectedCategory("Vegan");
+    }
   }
 
   return (
@@ -48,40 +57,63 @@ export default function CategoryPage() {
       <hr className="mt-10 border-2 border-border" />
       <div className="flex flex-col gap-5 mb-5 mt-5">
         <div className="flex flex-row justify-between text-primary">
-          <div className="flex justify-start">Home/Vegan</div>
+          <div className="flex justify-start">
+            {selectedCategoryByUser === "Vegan"
+              ? "Home/Vegan"
+              : "Home/Vegetarian"}{" "}
+          </div>
           <div className="flex justify-end bg-primary-soft">
-            /category/Vegan
+            {selectedCategoryByUser === "Vegan"
+              ? "/category/Vegan"
+              : "/category/Vegetarian"}
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-5 md:flex-row p-6 bg-primary-soft rounded-xl justify-between mb-10">
         <div className="flex flex-col justify-start">
-          <h1 className="text-3xl text-primary mb-1">Vegan Kitchen</h1>
+          <h1 className="text-3xl text-primary mb-1">
+            {selectedCategoryByUser === "Vegan"
+              ? "Vegan Kitchen"
+              : "Vegetarian Kitchen"}
+          </h1>
           <p className="text-sm mb-1">Plant-based: no dairy, eggs, or honey</p>
           <p className="text-xs text-primary">6 recipes </p>
         </div>
         <div className="justify-end">
-          <button className="bg-surface text-primary rounded-xl border-1 border-primary px-3 py-1">
-            Switch to Vegetarian Kitchen
+          <button
+            onClick={handleSwitchCategory}
+            className="bg-surface text-primary rounded-xl border-1 border-primary px-3 py-1"
+          >
+            {selectedCategoryByUser === "Vegan"
+              ? "Switch to Vegetarian Kitchen"
+              : "Switch to Vegan Kitchen"}
           </button>
         </div>
       </div>
       <div>
-        <div className="bg-surface rounded-xl border-1 border-border w-full p-5 flex flex-row justify-between items-center mb-10">
-          <div className="flex flex-row gap-5 justify-start items-center">
-            <div className="w-20 h-20 border-1 border-border rounded-xl bg-photo-1 place-items-center">
-              <img
-                src={data?.at(0)?.strMealThumb}
-                alt="recipe"
-                className="rounded-xl"
-              />
-            </div>
-            <div className="text-md text-primary"> {data?.at(0)?.strMeal}</div>
-          </div>
-          <div className="text-primary text-center justify-end">
-            <button onClick={handleOpenRecipe}> View recipe </button>
-          </div>
-        </div>
+        <ul>
+          {data?.map((item) => (
+            <li key={item.idMeal}>
+              <div className="bg-surface rounded-xl border-1 border-border w-full p-5 flex flex-row justify-between items-center mb-10">
+                <div className="flex flex-row gap-5 justify-start items-center">
+                  <div className="w-20 h-20 border-1 border-border rounded-xl bg-photo-1 place-items-center">
+                    <img
+                      src={item.strMealThumb}
+                      alt="recipe"
+                      className="rounded-xl"
+                    />
+                  </div>
+                  <div className="text-md text-primary"> {item.strMeal}</div>
+                </div>
+                <div className="text-primary text-center justify-end">
+                  <button onClick={() => handleOpenRecipe(item.idMeal)}>
+                    View recipe{" "}
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
