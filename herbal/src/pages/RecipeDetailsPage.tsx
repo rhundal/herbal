@@ -9,7 +9,7 @@ import useFetch from "../hooks/useFetch";
 import { fetchRecipeById } from "../services/apiService";
 import FavoritesContext from "../context/FavoritesContext";
 
-import type { Recipe, Meal } from "../types/recipe";
+import type { Recipe } from "../types/recipe";
 
 export default function RecipeDetailsPage() {
   const userContext = useContext(UserInputContext);
