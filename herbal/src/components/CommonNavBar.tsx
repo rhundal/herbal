@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import FavoritesContext from "../context/FavoritesContext";
+import { useContext } from "react";
 export default function CommonNavBar() {
   const navigate = useNavigate();
 
+  const favContext = useContext(FavoritesContext);
+
+  if (!favContext) return null;
+
+  let favoritesArray = favContext.favorites;
   function handleBrowse() {
     navigate("/search");
   }
@@ -38,7 +45,7 @@ export default function CommonNavBar() {
               className="border-b border-primary"
             >
               {" "}
-              Favorites(3)
+              Favorites({favoritesArray.length})
             </button>
           </div>
         </div>

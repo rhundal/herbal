@@ -13,18 +13,25 @@ import CommonNavBar from "../components/CommonNavBar";
 import Navbar from "../components/Navbar";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import FavoritesContext from "../context/FavoritesContext";
+import type { Recipe, Meal } from "../types/recipe";
 
 export default function SearchResultsPage() {
   // pass props from NavBar to this page
   // use callback function as props to fetch results by searching that term and display here
   // passing value from child to parent component
   const userContext = useContext(UserInputContext);
+  const favContext = useContext(FavoritesContext);
 
   const [userSearchTerm, setUserSearchTerm] = useState<string>("");
 
   // search userSearchTerm against the category selected by using the function filterMealsBySearchTerm
 
-  if (!userContext) return null;
+  if (!userContext || !favContext) return null;
+
+  let isFav = favContext.isFavorite;
+  let addFav = favContext.addFavorite;
+  let remFav = favContext.removeFavorite;
 
   let selectedCategoryByUser = userContext.selectedCategory;
 
@@ -45,8 +52,25 @@ export default function SearchResultsPage() {
     navigate(`/recipe/${id}`);
   }
 
-  function addToFavorites() {}
+  function handleToggleFavorite(meal: Meal) {
+    if (isFav(meal.idMeal)) {
+      remFav(meal.idMeal);
+      return;
+    }
 
+    const recipe: Recipe = {
+      idMeal: meal.idMeal,
+      strMeal: meal.strMeal,
+      strMealThumb: meal.strMealThumb,
+      strInstructions: "",
+      strTags: [],
+      strYoutube: null,
+      ingredients: [],
+      strMeasures: [],
+    };
+
+    addFav(recipe);
+  }
   const filteredMeals = categoryMeals
     ? filterMealsBySearchTerm(userSearchTerm, categoryMeals)
     : [];
@@ -81,7 +105,7 @@ export default function SearchResultsPage() {
                     </div>
                     <div className="m-5">
                       <button
-                        onClick={addToFavorites}
+                        onClick={() => handleToggleFavorite(meal)}
                         className="bg-surface text-primary rounded-xl border-1 bg-photo-5 border-error px-3 py-1"
                       >
                         Add To Favorites

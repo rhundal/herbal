@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { UserInputProvider } from "./context/UserInputContext.tsx";
+import { FavoriteProvider } from "./context/FavoritesContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <UserInputProvider>
-        <App />
-      </UserInputProvider>
+      <FavoriteProvider>
+        <UserInputProvider>
+          <App />
+        </UserInputProvider>
+      </FavoriteProvider>
     </BrowserRouter>
   </StrictMode>,
 );

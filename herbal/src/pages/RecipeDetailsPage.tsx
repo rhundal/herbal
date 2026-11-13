@@ -7,10 +7,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserInputContext from "../context/UserInputContext";
 import useFetch from "../hooks/useFetch";
 import { fetchRecipeById } from "../services/apiService";
+import FavoritesContext from "../context/FavoritesContext";
+
+import type { Recipe, Meal } from "../types/recipe";
+
 export default function RecipeDetailsPage() {
   const userContext = useContext(UserInputContext);
+  const favContext = useContext(FavoritesContext);
 
-  if (!userContext) return null;
+  if (!userContext || !favContext) return null;
+
+  let isFav = favContext.isFavorite;
+  let addFav = favContext.addFavorite;
+  let remFav = favContext.removeFavorite;
 
   let selectedCategoryByUser = userContext.selectedCategory;
 
@@ -25,13 +34,23 @@ export default function RecipeDetailsPage() {
   console.log(loading);
   console.log(error);
 
+  function handleToggleFavorite(currentRecipe: Recipe | null) {
+    if (!currentRecipe) return;
+
+    if (isFav(currentRecipe.idMeal)) {
+      remFav(currentRecipe.idMeal);
+      return;
+    }
+
+    addFav(currentRecipe);
+  }
+
   const navigate = useNavigate();
 
   function handleOpenMenu() {
     navigate("/category/Vegan");
   }
 
-  function addToFavorites() {}
   return (
     <div className="bg-background flex flex-col m-15">
       <CommonNavBar />
@@ -60,7 +79,7 @@ export default function RecipeDetailsPage() {
               </div>
               <div className="m-5 flex-end">
                 <button
-                  onClick={addToFavorites}
+                  onClick={() => handleToggleFavorite(recipe)}
                   className="bg-surface text-primary rounded-xl border-1 bg-photo-5 border-error px-3 py-1"
                 >
                   Add To Favorites
