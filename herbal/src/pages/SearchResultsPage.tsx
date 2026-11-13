@@ -45,6 +45,8 @@ export default function SearchResultsPage() {
     navigate(`/recipe/${id}`);
   }
 
+  function addToFavorites() {}
+
   const filteredMeals = categoryMeals
     ? filterMealsBySearchTerm(userSearchTerm, categoryMeals)
     : [];
@@ -68,13 +70,23 @@ export default function SearchResultsPage() {
                   <div className="p-4 font-semibold text-primary">
                     {meal.strMeal}
                   </div>
-                  <div className="m-5">
-                    <button
-                      onClick={() => handleClickRecipe(meal.idMeal)}
-                      className="bg-surface text-primary rounded-xl border-1 border-primary px-3 py-1"
-                    >
-                      View Recipe
-                    </button>
+                  <div className="flex flex-col md:flex-row">
+                    <div className="m-5">
+                      <button
+                        onClick={() => handleClickRecipe(meal.idMeal)}
+                        className="bg-surface text-primary rounded-xl border-1 border-primary px-3 py-1"
+                      >
+                        View Recipe
+                      </button>
+                    </div>
+                    <div className="m-5">
+                      <button
+                        onClick={addToFavorites}
+                        className="bg-surface text-primary rounded-xl border-1 bg-photo-5 border-error px-3 py-1"
+                      >
+                        Add To Favorites
+                      </button>
+                    </div>
                   </div>
                 </div>
               </li>

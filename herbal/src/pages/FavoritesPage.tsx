@@ -2,5 +2,9 @@
 // if no favorites, the page displays a default mssg - prompting user to browse and add favs.
 
 export default function FavoritesPage() {
-  return <div> Favorites Page</div>;
+  return (
+    <div>
+      <div> Favorites Page</div>
+    </div>
+  );
 }

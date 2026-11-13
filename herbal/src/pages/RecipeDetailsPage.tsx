@@ -31,6 +31,7 @@ export default function RecipeDetailsPage() {
     navigate("/category/Vegan");
   }
 
+  function addToFavorites() {}
   return (
     <div className="bg-background flex flex-col m-15">
       <CommonNavBar />
@@ -49,12 +50,22 @@ export default function RecipeDetailsPage() {
             />
           </div>
           <div className="flex flex-col flex-1 min-w-0">
-            <div className="mb-5">
-              <button className="bg-transparent text-primary rounded-xl border-1 border-primary px-3 p-1">
-                {selectedCategoryByUser === "Vegan"
-                  ? "Vegan Kitchen"
-                  : "Vegetarian Kitchen"}
-              </button>
+            <div className="flex flex-col md:flex-row justify-between">
+              <div className="m-5 flex-start">
+                <button className="bg-transparent text-primary rounded-xl border-1 border-primary px-3 p-1">
+                  {selectedCategoryByUser === "Vegan"
+                    ? "Vegan Kitchen"
+                    : "Vegetarian Kitchen"}
+                </button>
+              </div>
+              <div className="m-5 flex-end">
+                <button
+                  onClick={addToFavorites}
+                  className="bg-surface text-primary rounded-xl border-1 bg-photo-5 border-error px-3 py-1"
+                >
+                  Add To Favorites
+                </button>
+              </div>
             </div>
             <div className="mb-5">
               <h1 className="text-primary text-3xl"> {recipe?.strMeal}</h1>
